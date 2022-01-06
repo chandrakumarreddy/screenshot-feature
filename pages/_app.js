@@ -1,7 +1,8 @@
-import '../styles/globals.css'
+import "../styles/globals.css";
+import AuthHoc from "./hoc/auth";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+function MyApp({ Component, pageProps, ...rest }) {
+  return <Component {...pageProps} {...rest} />;
 }
 
-export default MyApp
+export default AuthHoc(MyApp);
