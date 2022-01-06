@@ -2,50 +2,54 @@
 import { chromium } from "playwright";
 
 async function generateImage({ url, res, selector }) {
-  const browser = await chromium.launch();
-  // Create a new page
-  const page = await browser.newPage();
-  await page.goto(url);
+  try {
+    const browser = await chromium.launch();
+    // Create a new page
+    const page = await browser.newPage();
+    await page.goto(url);
 
-  // Set the content to our rendered HTML
-  // await page.setContent(html, { waitUntil: "domcontentloaded" });
+    // Set the content to our rendered HTML
+    // await page.setContent(html, { waitUntil: "domcontentloaded" });
 
-  // Wait until all images and fonts have loaded
-  // await page.evaluate(async () => {
-  //   const selectors = Array.from(document.querySelectorAll("img"));
-  //   await Promise.all([
-  //     document.fonts.ready,
-  //     ...selectors.map((img) => {
-  //       // Image has already finished loading, let’s see if it worked
-  //       if (img.complete) {
-  //         // Image loaded and has presence
-  //         if (img.naturalHeight !== 0) return;
-  //         // Image failed, so it has no height
-  //         throw new Error("Image failed to load");
-  //       }
-  //       // Image hasn’t loaded yet, added an event listener to know when it does
-  //       return new Promise((resolve, reject) => {
-  //         img.addEventListener("load", resolve);
-  //         img.addEventListener("error", reject);
-  //       });
-  //     }),
-  //   ]);
-  // });
+    // Wait until all images and fonts have loaded
+    // await page.evaluate(async () => {
+    //   const selectors = Array.from(document.querySelectorAll("img"));
+    //   await Promise.all([
+    //     document.fonts.ready,
+    //     ...selectors.map((img) => {
+    //       // Image has already finished loading, let’s see if it worked
+    //       if (img.complete) {
+    //         // Image loaded and has presence
+    //         if (img.naturalHeight !== 0) return;
+    //         // Image failed, so it has no height
+    //         throw new Error("Image failed to load");
+    //       }
+    //       // Image hasn’t loaded yet, added an event listener to know when it does
+    //       return new Promise((resolve, reject) => {
+    //         img.addEventListener("load", resolve);
+    //         img.addEventListener("error", reject);
+    //       });
+    //     }),
+    //   ]);
+    // });
 
-  // await page.waitForSelector(`#${selector}`);
-  // const element = await page.$(`#${selector}`);
+    // await page.waitForSelector(`#${selector}`);
+    // const element = await page.$(`#${selector}`);
 
-  const screenshotBuffer = await page.locator(`#${selector}`).screenshot({
-    fullPage: false,
-    type: "png",
-  });
+    const screenshotBuffer = await page.locator(`#${selector}`).screenshot({
+      fullPage: false,
+      type: "png",
+    });
 
-  res.writeHead(200, { "Content-Type": "image/png" });
-  res.write(screenshotBuffer, "binary");
-  res.end(null, "binary");
+    res.writeHead(200, { "Content-Type": "image/png" });
+    res.write(screenshotBuffer, "binary");
+    res.end(null, "binary");
 
-  await page.close();
-  await browser.close();
+    await page.close();
+    await browser.close();
+  } catch (error) {
+    res.send(error);
+  }
 }
 
 export default async function handler(req, res) {
