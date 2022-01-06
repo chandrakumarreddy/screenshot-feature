@@ -49,7 +49,6 @@ async function generateImage({ url, res, selector }) {
 
 export default async function handler(req, res) {
   const { url, selector } = req.query;
-  console.log(req.query);
   if (url && selector) {
     await generateImage({ url, res, selector });
     return;
