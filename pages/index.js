@@ -4,7 +4,6 @@ import styles from "../styles/Home.module.css";
 
 export default function Home(props) {
   const { login, setLogin } = props;
-  console.log(login);
   return (
     <div className={styles.container}>
       <Head>
